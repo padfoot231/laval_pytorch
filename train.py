@@ -58,7 +58,7 @@ for epoch in range(7):
 		optimizer.step()
 		running_loss += loss.data[0]
 		if i % 10 == 9:
-			su = 0
+			total = 0
 			for j in range(32):
 				correct = 0
 				input_test, label_test = Variable(X_test[j*128:j*128+128]), Variable(y_test[j*128:j*128+128])
@@ -66,9 +66,9 @@ for epoch in range(7):
 				output_test
 				pred = torch.max(output_test,1)
 				correct += (pred[1]==label_test).sum()
-				su+=correct
-				print("acc", correct)
-			print("sum", su)
+				su+= int(correct)
+				print("accuracy prediction out of 128 batch ", correct)
+			print("accuracy prediction for whole test dataset ", total)
 			print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / 2000))
 			running_loss = 0.0
 	torch.save(model.state_dict(), "mnist_model" + str(epoch))
