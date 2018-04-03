@@ -5,25 +5,21 @@ import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np 
 import pandas as pd 
-#handeling data set
+# handeling data set from kaggel using pandas
 df = pd.read_csv('train.csv')
 df_test = pd.read_csv('test.csv')
 X_image = df.iloc[:,1:].values
 Y = df.iloc[:,0:1].values
 Y = np.reshape(Y,[42000])
-# Y = Y.tolist()
-# n_values = np.max(Y) + 1
-# Y_image = np.eye(n_values)[Y]
 X_image = np.reshape(X_image,[42000,1,28,28])
 X_image = torch.FloatTensor(X_image)
 Y_image = torch.LongTensor(Y)
-#defining neural network
+# Test Train split of the training data
 X_train = X_image[:37800]
 y_train = Y_image[:37800]
 X_test = X_image[37800:]
 y_test = Y_image[37800:]
-#defining neural network
-print("ass")
+# defining neural network
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
@@ -46,6 +42,7 @@ class Net(nn.Module):
         x = self.fc2(x)
         return x
 model = Net()
+#loading the model by method 1
 model = torch.load('mnist_model_meth1 6')
 total = 0
 for i in range(32):
@@ -56,6 +53,6 @@ for i in range(32):
     correct += (pred[1]==labels).sum()
     print("batch acc out of 128 ",correct)
     total += int(correct)
-    #print("total ", total)
-print("acc out of 4200 ", total)
+    print("total prediction out of 128 samples ", total)
+print("accurate prediction out of 4096 samples ", total)
 
